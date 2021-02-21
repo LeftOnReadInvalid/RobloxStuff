@@ -1,0 +1,20 @@
+local PathfindingService = game:GetService('PathfindingService')
+
+local human = game.Players.LocalPlayer.Character;WaitForChild('Humanoid')
+local hrp = game.Players.LocalPlayer.Character:WaitForChild('HumanoidRootPart')
+
+for i,bubble in pairs(game.Workspace.FoodObjects()) do
+local path = PathfindingService:CreatePath()
+path:ComputeAsync(hrp.Position, bubble.Position)
+local waypoints = path:GetWaypoints()
+end
+
+for i, waypoint in pairs(waypoints) do
+    if waypoint.Action == Enum.PathWaypointAction.Jump then
+        human:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+    human:MoveTo(waypoint.Position)
+    human.MoveToFinished:Wait(2)
+end
+
+human:MoveTo(bubble.Position)
